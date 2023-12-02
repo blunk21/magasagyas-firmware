@@ -5,3 +5,5 @@ projectfiles
 mbed-os
 BUILD
 
+BME680
+W25Q64FVSSIG
