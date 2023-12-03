@@ -3,7 +3,8 @@
 
 #include "mbed.h"
 #include "LittleFileSystem.h"
-#include "W25Q64FV.h"
+#include "SPIFBlockDevice.h"
+
 
 #define SPI_FLASH_MOSI PA_7
 #define SPI_FLASH_MISO PA_6
@@ -13,17 +14,16 @@
 
 class DataManager {
 public:
+    
+
+
     // Get the singleton instance
     static DataManager& getDataManager();
 
-    // Initialize the DataManager
-    void initialize();
+    
 
-    // Write data to the filesystem
-    bool writeData(const char* filePath, const char* data);
 
-    // Read data from the filesystem
-    bool readData(const char* filePath, char* buffer, int bufferSize);
+
 
 private:
     // Private constructor for singleton
@@ -37,12 +37,7 @@ private:
     DataManager& operator=(const DataManager&);
 
 
-    // W25Q64 flash memory driver
-    W25Q64FV flash;
-
-    
-
-    // LittleFileSystem instance
+    SPIFBlockDevice bd;
     LittleFileSystem fs;
 };
 

@@ -1,6 +1,6 @@
-/*#include "DataManager.h"
+#include "DataManager.h"
 
-DataManager::DataManager() : flash(SPI_FLASH_MOSI, SPI_FLASH_MISO, SPI_FLASH_CLK, SPI_FLASH_CS), fs("fs") {}
+DataManager::DataManager() : bd(SPI_FLASH_MOSI, SPI_FLASH_MISO, SPI_FLASH_CLK, SPI_FLASH_CS), fs("fs") {}
 
 DataManager::~DataManager() {}
 
@@ -11,7 +11,7 @@ DataManager& DataManager::getDataManager() {
 
 void DataManager::initialize() {
     // Mount the filesystem
-    int err = fs.mount(&flash);
+    int err = fs.mount(&bd);
     if (err) {
         printf("Error mounting the filesystem: %d\n", err);
         // Handle the error appropriately, e.g., by resetting or logging
@@ -43,4 +43,3 @@ bool DataManager::readData(const char* filePath, char* buffer, int bufferSize) {
 
     return true;
 }
-*/
