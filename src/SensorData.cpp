@@ -2,6 +2,7 @@
 #include "SensorData.h"
 #include <algorithm>
 #include <cstdint>
+#include <cstdlib>
 
 // Private constructor to ensure singleton pattern
 SensorData::SensorData()
@@ -32,11 +33,11 @@ void SensorData::measureSoilHumidity() {
   soilHumidity = remapSoilHumidity(analog_value);
 }
 
-bool SensorData::isWaterLevelCritical() {
+uint8_t SensorData::isWaterLevelCritical() {
   if (_wtr_lvl == 0)
-    return false;
+    return 0 ;
   else
-    return true;
+    return 1;
 }
 
 void SensorData::measureAirPressure() {
@@ -68,6 +69,7 @@ void SensorData::readSensorData() {
       data_manager.sensor_data_mailbox.try_alloc();
   if (measurement == NULL) {
     printf("Unable to allocate mail\n");
+    free(measurement);
     return;
   }
 
