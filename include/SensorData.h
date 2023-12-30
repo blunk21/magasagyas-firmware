@@ -45,7 +45,7 @@ public:
     void measureAirHumidity();
     void measureSoilHumidity();
     void measureAirPressure();
-    bool isWaterLevelCritical();
+    uint8_t isWaterLevelCritical();
     void makeAllMeasurements();
     void readSensorData();
 
