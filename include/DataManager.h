@@ -4,6 +4,7 @@
 #include "LittleFileSystem.h"
 #include "SPIFBlockDevice.h"
 #include "mbed.h"
+#include <cstdint>
 
 #define SPI_FLASH_MOSI PA_7
 #define SPI_FLASH_MISO PA_6
@@ -19,34 +20,25 @@ typedef struct {
   int32_t air_humidity;
   int32_t air_pressure;
   uint8_t soil_humidity;
-  bool water_level_critical;
+  uint8_t water_level_critical;
 
 } sensor_measurement_t;
 
 class DataManager {
 public:
-  // Get the singleton instance
   static DataManager &getDataManager();
 
   Mail<sensor_measurement_t, 16> sensor_data_mailbox;
   void storeSensorData();
+  void printSensorMeasurements();
 
 private:
-  // Private constructor for singleton
   DataManager();
-
-  // Private destructor
-  ~DataManager();
-
-  // Private copy constructor and assignment operator to prevent duplication
-  DataManager(const DataManager &);
-  DataManager &operator=(const DataManager &);
-
   bool mountFileSystem();
 
   SPIFBlockDevice _bd;
   LittleFileSystem _fs;
-  
+
   Mutex file_system_mutex;
 };
 
