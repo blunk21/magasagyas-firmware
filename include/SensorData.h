@@ -4,12 +4,17 @@
 
 #include "BME680.h"
 #include <cstdint>
+#include "DataManager.h"
 
 
 #define TPH_SENSOR_SDA PB_9
 #define TPH_SENSOR_SCL PB_8
-#define WTR_LVL_PIN PF_12
+#define WTR_LVL_PIN PG_3
+#define SOIL_HUMIDITY_PIN PC_0
 #define SENSOR_READ_INTERVAL_MS 5000ms
+
+
+
 
 
 void read_sensors_handler();
@@ -19,6 +24,7 @@ class SensorData {
 private:
     // Private constructor to ensure singleton pattern
     SensorData();
+    uint8_t remapSoilHumidity(float analogValue);
 
     // Sensor data variables
     int32_t temperature;
@@ -28,17 +34,20 @@ private:
 
     BME680 _tph_sensor;
     DigitalIn _wtr_lvl;
+    AnalogIn _soil_sensor;
 
 public:
     // Public method to get the instance of the singleton
     static SensorData& getSensorData();
 
-    // Setters for sensor data
+    // Do measurements
     void measureTemperature();
     void measureAirHumidity();
     void measureSoilHumidity();
     void measureAirPressure();
-    bool isWaterLevelCritical();
+    uint8_t isWaterLevelCritical();
+    void makeAllMeasurements();
+    void readSensorData();
 
     // Getter methods for sensor data
     int32_t getTemperature() const;
@@ -46,7 +55,7 @@ public:
     int32_t getAirPressure() const;
     uint8_t getSoilHumidity() const;
 
-    void makeAllMeasurements();
+    
    
 };
 

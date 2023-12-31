@@ -5,7 +5,8 @@
             "spif-driver.SPI_MOSI" : "PA_7",
             "spif-driver.SPI_MISO" : "PA_6",
             "spif-driver.SPI_CLK" : "PA_5",
-            "spif-driver.SPI_CS" : "PA_12"
+            "spif-driver.SPI_CS" : "PF_12",
+             "target.printf_lib": "std"
 
 
 
