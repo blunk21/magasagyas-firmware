@@ -13,7 +13,7 @@ enum alarm_duration {
 
 class IrrigationManager {
 private:
-  bool _irrigation_in_progress;
+  bool _irrigation_in_progress, _irrigation_scheduled;
   Timeout irrigation_stop_timer;
   DigitalOut _pump_relay;
   bool _initialized;
@@ -21,7 +21,7 @@ private:
   uint8_t _next_alarm;
   IrrigationManager();
 
-  time_t calculateNextIrrigationTime();
+  
 
 public:
   static IrrigationManager &getIrrigationManager();
@@ -30,6 +30,7 @@ public:
   void attachEventQueue(EventQueue *event_p);
   void init();
   void releaseIrrigation();
+  void scheduleNextIrrigationTime();
 };
 
 #endif
