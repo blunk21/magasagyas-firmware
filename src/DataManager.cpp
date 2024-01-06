@@ -29,13 +29,10 @@ void DataManager::storeSensorData() {
     // file_system_mutex.unlock();
     return;
   }
-  else {
-  printf("Filesystem mounted successfully\n");
-  }
   // file_system_mutex.lock();
   FILE *file = fopen("/fs/sensor_data.csv", "a");
   if (file == NULL) {
-    printf("Could not open file");
+    printf("Could not open file\n");
     // file_system_mutex.unlock();
     return;
   } else {
