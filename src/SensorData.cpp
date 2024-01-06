@@ -1,8 +1,12 @@
 // sensor_data.cpp
 #include "SensorData.h"
+#include "GlobalEventQueue.h"
+#include "SystemConfig.h"
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
+
 
 // Private constructor to ensure singleton pattern
 SensorData::SensorData()
@@ -11,6 +15,8 @@ SensorData::SensorData()
       _wtr_lvl(WTR_LVL_PIN, PinMode::PullDown) {
   _tph_sensor.init();
   _tph_sensor.setForcedMode();
+  _wtr_lvl.rise(callback(&IrrigationManager::getIrrigationManager(),
+                         &IrrigationManager::stopIrrigation));
 }
 
 // Public method to get the instance of the singleton
@@ -35,7 +41,7 @@ void SensorData::measureSoilHumidity() {
 
 uint8_t SensorData::isWaterLevelCritical() {
   if (_wtr_lvl == 0)
-    return 0 ;
+    return 0;
   else
     return 1;
 }
@@ -81,8 +87,12 @@ void SensorData::readSensorData() {
   measurement->air_pressure = getAirPressure();
   measurement->water_level_critical = isWaterLevelCritical();
   osStatus event = data_manager.sensor_data_mailbox.put(measurement);
-  if (event == osOK)
+  if (event == osOK) {
     printf("Successfully put sensor data to queue.\n\r");
+    GlobalEventQueue::getGlobalEventQueue()->call(callback(
+        &DataManager::getDataManager(), &DataManager::storeSensorData));
+  }
+
   else
     printf("Unable to put sensor data to queue.\n\r");
 }
@@ -100,13 +110,4 @@ uint8_t SensorData::remapSoilHumidity(float analogValue) {
                                       (inputMax - inputMin);
 
   return static_cast<uint8_t>(outputValue);
-}
-
-void read_sensors_handler() {
-  while (true) {
-    SensorData &sensor_data = SensorData::getSensorData();
-    sensor_data.makeAllMeasurements();
-
-    ThisThread::sleep_for(SENSOR_READ_INTERVAL_MS);
-  }
 }

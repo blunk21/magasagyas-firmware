@@ -5,19 +5,22 @@
 #include "BME680.h"
 #include <cstdint>
 #include "DataManager.h"
+#include "IrrigationManager.h"
 
 
 #define TPH_SENSOR_SDA PB_9
 #define TPH_SENSOR_SCL PB_8
 #define WTR_LVL_PIN PG_3
 #define SOIL_HUMIDITY_PIN PC_0
-#define SENSOR_READ_INTERVAL_MS 5000ms
 
 
 
 
 
-void read_sensors_handler();
+
+
+
+
 
 
 class SensorData {
@@ -33,7 +36,7 @@ private:
     uint8_t soilHumidity;
 
     BME680 _tph_sensor;
-    DigitalIn _wtr_lvl;
+    InterruptIn _wtr_lvl;
     AnalogIn _soil_sensor;
 
 public:
