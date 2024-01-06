@@ -2,18 +2,12 @@
 #include <cstdint>
 
 SystemConfig::SystemConfig()
-    : alarmA{0, 0, 7}, alarmB{0, 0, 17}, durationA_sec(10), durationB_sec(15),
+    : alarmA{0, 1, 6}, alarmB{0, 3, 6}, durationA_sec(10), durationB_sec(15),
       _time_synced(false), sensor_measurement_freq(SENSOR_READ_INTERVAL_SECONDS) {
 
 
 
-  tm currentTm;
-  time_t currentTimestamp = time(NULL);
-  localtime_r(&currentTimestamp, &currentTm);
-
-  alarmA.tm_mday = alarmB.tm_mday = currentTm.tm_mday;
-  alarmA.tm_mon = alarmB.tm_mon = currentTm.tm_mon;
-  alarmA.tm_year = alarmB.tm_year = currentTm.tm_year;
+  _time_synced = true;
 }
 
 SystemConfig &SystemConfig::getSystemConfig() {
